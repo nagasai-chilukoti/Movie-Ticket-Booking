@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlimFlex: Your Movie Experience</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .home-btn {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            background-color: #ff6347; /* Tomato color for a vibrant look */
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .home-btn:hover {
+            background-color: #e5533f;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6347; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            margin: 0;
+            flex: 1;
+        }
+
+        #search-bar {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 140px; 
+            transform: translateY(-50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 150px; 
+        }
+
+        #search-input {
+            border: none;
+            padding: 8px;
+            font-size: 1rem;
+            width: 120px; 
+            outline: none;
+        }
+
+        #search-icon {
+            width: 30px;
+            height: 30px;
+            background: url('https://cdn-icons-png.flaticon.com/512/622/622669.png') no-repeat center center;
+            background-size: 20px 20px;
+            opacity: 0.5; 
+            border: none;
+            cursor: pointer;
+            background-color: transparent;
+        }
+
+        #location-selection {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+        }
+
+        #location {
+            padding: 8px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            appearance: none;
+            padding-right: 30px;
+            background-color: #f3f3f3;
+            cursor: pointer;
+            color: #555;
+        }
+
+        .location-icon {
+            margin-right: 5px;
+            font-size: 1.5rem;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movies-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .movie {
+            width: calc(25% - 20px);
+            border: 1px solid #ccc;
+            background-color: #fff;
+            padding: 15px;
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .movie:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie img {
+            max-width: 100%;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .movie .movie-info {
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .movie h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            text-align: center;
+            color: #333;
+        }
+
+        .movie p {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .movie .book-btn {
+            display: block;
+            margin: 10px auto 0;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .movie .book-btn:hover {
+            background-color: #555;
+        }
+
+        #no-movies-message {
+            text-align: center;
+            color: #333;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #booking-form {
+            display: none;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: grid;
+            grid-gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select {
+            padding: 8px;
+            font-size: 1rem;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        @media (max-width: 1024px) {
+            .movie {
+                width: calc(33.33% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .movie {
+                width: calc(50% - 20px);
+            }
+
+            .title {
+                font-size: 2.2rem;
+            }
+
+            #search-bar {
+                left: 90px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .movie {
+                width: 100%;
+            }
+
+            header {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            #search-bar {
+                left: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="home-btn" onclick="window.location.href='index.html'">Home</button>
+        <div class="title">FlimFlex</div>
+        <div id="search-bar">
+            <input type="text" id="search-input" placeholder="Search movies..." oninput="filterMovies()">
+            <button id="search-icon"></button>
+        </div>
+        <div id="location-selection">
+            <span class="location-icon">📍</span>
+            <select id="location" onchange="updateMovies()">
+                <option value="Guntur">Guntur</option>
+                <option value="Vijayawada">Vijayawada</option>
+                <option value="Vizag">Vizag</option>
+                <option value="Rajamundry">Rajamundry</option>
+                <option value="Eluru">Eluru</option>
+            </select>
+        </div>
+    </header>
+    
+    <main>
+        <div id="no-movies-message"></div>
+        <div class="movies-container" id="movies-container">
+            <!-- Movie articles will be dynamically inserted here -->
+        </div>
+
+        <!-- Booking Form Section (hidden by default) -->
+        <section id="booking-form-section">
+            <h2>Book Your Movie</h2>
+            <form id="booking-form">
+                <label for="location">Location:</label>
+                <select id="booking-location" name="location" required>
+                    <!-- Options will be dynamically inserted here -->
+                </select>
+                
+                <label for="seats">Number of Seats:</label>
+                <input type="number" id="seats" name="seats" min="1" required>
+                
+                <button type="submit">Confirm Booking</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const moviesData = {
+            Guntur: [
+                { title: "SALAAR", genre: "Action", image: "prabhas1.jpg" },
+                { title: "SARIPODHAA SANIVAARAM", genre: "Action/Thriller", image: "nani1.jpg" },
+                { title: "PUSHPA-2", genre: "Action", image: "pushpa.jpg" },
+                { title: "KANGUVA", genre: "SCIFI", image: "kanguva.webp" },
+                { title: "GAME CHANGER", genre: "Political/Drama", image: "game.webp" },
+                { title: "DEADPOOL & WOLVERINE", genre: "Super Hero", image: "deadpool.avif" },
+                { title: "MR.BACCHAN", genre: "Action", image: "mmm.webp"},
+                { title: "INDIAN-2", genre: "Social/Drama", image: "indian2.jpg" },
+                { title: "DEVARA", genre: "Action", image: "Screenshot (2).png" },
+                
+               { title: "KALKI", genre: "Mythology/SCIFI", image: "kalki.avif" }
+            ],
+            Vijayawada: [
+                { title: "GAME CHANGER", genre: "Political/Drama", image: "game.webp" },
+                { title: "OG", genre: "Action/Adventure", image: "og.jpg" },
+                { title: "DEADPOOL & WOLVERINE", genre: "Super Hero", image: "deadpool.avif" },
+                { title: "SARIPODHAA SANIVAARAM", genre: "Action/Thriller", image: "nani1.jpg" },
+                { title: "INDIAN-2", genre: "Social/Drama", image: "indian2.jpg" },
+                { title: "RAAYAN", genre: "Action", image: "raayan.jpg" },
+                { title: "KALKI", genre: "Mythology/SCIFI", image: "kalki.avif" }
+                 
+            ],
+            Vizag: [
+                { title: "SARIPODHAA SANIVAARAM", genre: "Action/Thriller", image: "nani1.jpg" },
+                { title: "OG", genre: "Action/Adventure", image: "og.jpg" },
+                { title: "DEVARA", genre: "Action", image: "Screenshot (2).png" },
+                { title: "Double ISMART", genre: "Action", image: "Double_iSmart.jpg" },
+                { title: "RAAYAN", genre: "Action", image: "raayan.jpg" },
+                { title: "INDIAN-2", genre: "Social/Drama", image: "indian2.jpg" },
+                { title: "PUSHPA-2", genre: "Action", image: "pushpa.jpg" }
+            ],
+            Rajamundry: [
+                { title: "SARIPODHAA SANIVAARAM", genre: "Action/Thriller", image: "nani1.jpg" },
+                { title: "GAME CHANGER", genre: "Political/Drama", image: "game.webp" },
+                { title: "DEADPOOL & WOLVERINE", genre: "Super Hero", image: "deadpool.avif" },
+                { title: "DEVARA", genre: "Action", image: "Screenshot (2).png" },
+                { title: "RAAYAN", genre: "Action", image: "raayan.jpg" },
+                { title: "OG", genre: "Action/Adventure", image: "og.jpg" }
+            ],
+            Eluru: [
+                { title: "GAME CHANGER", genre: "Political/Drama", image: "game.webp" },
+                { title: "KALKI", genre: "Mythology/SCIFI", image: "kalki.avif" },
+                { title: "OG", genre: "Action/Adventure", image: "og.jpg" },
+                { title: "DEVARA", genre: "Action", image: "Screenshot (2).png" },
+                { title: "DOUBLE ISMART", genre: "Action", image: "Double_iSmart.jpg" },
+                { title: "PUSHPA-2", genre: "Action", image: "pushpa.jpg" },
+                { title: "MR.BACCHAN", genre: "Action", image: "mmm.webp"}
+            ]
+        };
+
+        function updateMovies() {
+            const location = document.getElementById("location").value;
+            const moviesContainer = document.getElementById("movies-container");
+            const noMoviesMessage = document.getElementById("no-movies-message");
+
+            // Clear existing movies and message
+            moviesContainer.innerHTML = "";
+            noMoviesMessage.textContent = "";
+
+            // Get movies for the selected location
+            const movies = moviesData[location];
+
+            if (movies.length === 0) {
+                noMoviesMessage.textContent = "Sorry, no movies available in your selected area.";
+                return;
+            }
+
+            // Dynamically create and append movie articles
+            movies.forEach(movie => {
+                const movieArticle = document.createElement("article");
+                movieArticle.classList.add("movie");
+
+                movieArticle.innerHTML = `
+                    <img src="${movie.image}" alt="${movie.title}">
+                    <div class="movie-info">
+                        <h2>${movie.title}</h2>
+                        <p>Genre: ${movie.genre}</p>
+                        <button class="book-btn" onclick="openBookingPage('${location}', '${movie.title}', '${movie.image}')">Book Now</button>
+                    </div>
+                `;
+
+                moviesContainer.appendChild(movieArticle);
+            });
+        }
+
+        function filterMovies() {
+            const searchQuery = document.getElementById("search-input").value.toLowerCase();
+            const location = document.getElementById("location").value;
+            const moviesContainer = document.getElementById("movies-container");
+            const noMoviesMessage = document.getElementById("no-movies-message");
+
+            // Clear existing movies and message
+            moviesContainer.innerHTML = "";
+            noMoviesMessage.textContent = "";
+
+            // Get movies for the selected location
+            const movies = moviesData[location];
+
+            // Filter movies based on the search query
+            const filteredMovies = movies.filter(movie => movie.title.toLowerCase().includes(searchQuery));
+
+            if (filteredMovies.length === 0) {
+                noMoviesMessage.textContent = "Sorry, no movies match your search.";
+                return;
+            }
+
+            // Dynamically create and append filtered movie articles
+            filteredMovies.forEach(movie => {
+                const movieArticle = document.createElement("article");
+                movieArticle.classList.add("movie");
+
+                movieArticle.innerHTML = `
+                    <img src="${movie.image}" alt="${movie.title}">
+                    <div class="movie-info">
+                        <h2>${movie.title}</h2>
+                        <p>Genre: ${movie.genre}</p>
+                        <button class="book-btn" onclick="openBookingPage('${location}', '${movie.title}', '${movie.image}')">Book Now</button>
+                    </div>
+                `;
+
+                moviesContainer.appendChild(movieArticle);
+            });
+        }
+
+        function openBookingPage(location, movieTitle, movieImage) {
+            const bookingUrl = `booking.html?location=${encodeURIComponent(location)}&movie=${encodeURIComponent(movieTitle)}&image=${encodeURIComponent(movieImage)}`;
+            window.location.href = bookingUrl;
+        }
+
+        // Initial load
+        updateMovies();
+    </script>
+</body>
+</html>
